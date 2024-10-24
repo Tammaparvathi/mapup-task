@@ -1,0 +1,47 @@
+def flatten_dict(d, parent_key='', sep='.'):
+    # Resultant dictionary to store flattened key-value pairs
+    items = []
+    
+    for k, v in d.items():
+        # Create new key for the current level
+        new_key = f"{parent_key}{sep}{k}" if parent_key else k
+        
+        if isinstance(v, dict):
+            # Recursively flatten the dictionary
+            items.extend(flatten_dict(v, new_key, sep=sep).items())
+        
+        elif isinstance(v, list):
+            # If the value is a list, iterate through its elements
+            for i, item in enumerate(v):
+                # Handle further nesting for each element in the list
+                list_key = f"{new_key}[{i}]"
+                if isinstance(item, dict):
+                    items.extend(flatten_dict(item, list_key, sep=sep).items())
+                else:
+                    items.append((list_key, item))
+        
+        else:
+            # Base case: append the final key-value pair
+            items.append((new_key, v))
+    
+    return dict(items)
+
+# Example usage
+nested_dict = {
+    "road": {
+        "name": "Highway 1",
+        "length": 350,
+        "sections": [
+            {
+                "id": 1,
+                "condition": {
+                    "pavement": "good",
+                    "traffic": "moderate"
+                }
+            }
+        ]
+    }
+}
+
+flattened_dict = flatten_dict(nested_dict)
+print(flattened_dict)

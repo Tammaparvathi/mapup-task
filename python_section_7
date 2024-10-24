@@ -1,0 +1,43 @@
+def rotate_matrix_90_clockwise(matrix):
+    # Step 1: Rotate matrix 90 degrees clockwise
+    n = len(matrix)
+    rotated_matrix = [[0] * n for _ in range(n)]
+    
+    for i in range(n):
+        for j in range(n):
+            rotated_matrix[j][n - 1 - i] = matrix[i][j]
+    
+    return rotated_matrix
+
+def sum_row_col_excluding(matrix):
+    n = len(matrix)
+    final_matrix = [[0] * n for _ in range(n)]
+    
+    # Step 2: Replace each element with the sum of all elements in its row and column, excluding itself
+    for i in range(n):
+        for j in range(n):
+            row_sum = sum(matrix[i])  # Sum of the ith row
+            col_sum = sum(matrix[k][j] for k in range(n))  # Sum of the jth column
+            final_matrix[i][j] = row_sum + col_sum - 2 * matrix[i][j]  # Subtract the element itself twice
+            
+    return final_matrix
+
+def transform_matrix(matrix):
+    # Rotate the matrix by 90 degrees clockwise
+    rotated_matrix = rotate_matrix_90_clockwise(matrix)
+    
+    # Replace each element with the sum of all elements in the same row and column, excluding itself
+    final_matrix = sum_row_col_excluding(rotated_matrix)
+    
+    return final_matrix
+
+# Example usage
+matrix = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+]
+
+final_matrix = transform_matrix(matrix)
+for row in final_matrix:
+    print(row)
